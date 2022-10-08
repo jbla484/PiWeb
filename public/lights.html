@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body style="margin: auto; text-align: center;">
+
+<!-- Start of HTML -->
+<h1>Turn on Pink led light</h1>
+<p><a href="#" id="light" style="padding: 10px; background-color: pink; text-decoration: none; color: white;">Click Me</a></p>
+
+<h1>Turn on Red led light</h1>
+<p><a href="#" id="light2" style="padding: 10px; background-color: red; text-decoration: none; color: white;">Click Me</a></p>
+<!-- End of HTML -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.2/socket.io.js"></script> <!-- include socket.io client side script -->
+<script>
+var clicked = 0;
+var clicked2 = 0;
+var socket = io(); //load socket.io-client and connect to the host that serves the page
+window.addEventListener("load", function(){ //when page loads
+  $("#light").on("click", function() { //add event listener for when checkbox changes
+    if(clicked == 0) clicked = 1;
+    else clicked = 0;
+    socket.emit("light", Number(clicked)); //send button status to server (as 1 or 0)
+  });
+
+  $("#light2").on("click", function() { //add event listener for when checkbox changes
+    if(clicked2 == 0) clicked2 = 1;
+    else clicked2 = 0;
+    socket.emit("light2", Number(clicked2)); //send button status to server (as 1 or 0)
+  });
+});
+socket.on('light', function (data) { //get button status from client
+  socket.emit("light", data); //send push button status to back to server
+});
+socket.on('light2', function (data) { //get button status from client
+  socket.emit("light2", data); //send push button status to back to server
+});
+</script>
+
+</body>
+</html> 

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body
+      {
+        font-size: large;
+      }
+      .menu
+      {
+        display: inline-block;
+        padding: 10px;
+        margin: 0 10px;
+      }
+      .menu_wrapper
+      {
+        font-size: large;
+        background-color: black;
+        color: white;
+        padding: 30px 30px 46px 30px;
+      }
+      a
+      {
+        text-decoration: none;
+        color: white;
+      }
+    </style>
+  </head>
+<body style="margin: auto; text-align: center;">
+
+<!-- Start of HTML -->
+<div class="menu_wrapper">
+  <div class="menu" style="float:left;"><a href="index.html">Home</a></div>
+  <div class="menu"></div>
+  <div class="menu" style="float:right;"><a>Settings</a></div>
+  <div class="menu" style="float:right;"><a href="lights.html">Lights</a></div>
+  
+</div>
+
+<h1 style="margin-top: 40px;">Welcome to my webserver page</h1>
+<!-- End of HTML -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.2/socket.io.js"></script> <!-- include socket.io client side script -->
+<script>
+var clicked = 0;
+var clicked2 = 0;
+var socket = io(); //load socket.io-client and connect to the host that serves the page
+window.addEventListener("load", function(){ //when page loads
+  $("#light").on("click", function() { //add event listener for when checkbox changes
+    if(clicked == 0) clicked = 1;
+    else clicked = 0;
+    socket.emit("light", Number(clicked)); //send button status to server (as 1 or 0)
+  });
+
+  $("#light2").on("click", function() { //add event listener for when checkbox changes
+    if(clicked2 == 0) clicked2 = 1;
+    else clicked2 = 0;
+    socket.emit("light2", Number(clicked2)); //send button status to server (as 1 or 0)
+  });
+});
+socket.on('light', function (data) { //get button status from client
+  socket.emit("light", data); //send push button status to back to server
+});
+socket.on('light2', function (data) { //get button status from client
+  socket.emit("light2", data); //send push button status to back to server
+});
+</script>
+
+</body>
+</html> 
